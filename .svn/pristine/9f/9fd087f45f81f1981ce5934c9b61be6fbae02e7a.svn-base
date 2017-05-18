@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- 1 常量 -->
+	<constant name="struts.devMode" value="true"></constant>
+	<constant name="struts.ui.theme" value="simple"></constant>
+	
+	<!-- 2 公共项 -->
+	<package name="sta" namespace="/" extends="common">
+		<action name="staffAction_*" class="com.itheima.crm.staff.web.action.StaffAction" method="{1}">
+			<result name="success" type="redirectAction">staffAction_home</result>
+			<!-- 放在struts.xml去
+			<result name="login">/WEB-INF/pages/login.jsp</result>
+			-->
+			<result name="home">/WEB-INF/pages/frame.jsp</result>
+			
+			<result name="findAll">/WEB-INF/pages/staff/listStaff.jsp</result>
+			
+			<result name="editUI">/WEB-INF/pages/staff/editStaff.jsp</result>
+		</action>
+	</package>
+	
+</struts>

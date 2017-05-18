@@ -1,0 +1,74 @@
+package com.itheima.crm.staff.web.action;
+
+import java.util.List;
+
+import com.itheima.crm.department.domain.CrmDepartment;
+import com.itheima.crm.department.service.DepartmentService;
+import com.itheima.crm.staff.domain.CrmStaff;
+import com.itheima.crm.staff.service.StaffService;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ModelDriven;
+
+public class StaffAction extends ActionSupport implements ModelDriven<CrmStaff> {
+	private CrmStaff staff = new CrmStaff();	
+
+	@Override
+	public CrmStaff getModel() {
+		return staff;
+	}
+	//默认按照名称注入
+	private StaffService staffService;
+	public void setStaffService(StaffService staffService) {
+		this.staffService = staffService;
+	}
+	
+	private DepartmentService departmentService;
+	public void setDepartmentService(DepartmentService departmentService) {
+		this.departmentService = departmentService;
+	}
+	
+	
+	public String login(){
+		CrmStaff findStaff = staffService.login(staff);
+		if(findStaff != null){
+			ActionContext.getContext().getSession().put("loginStaff", findStaff);
+			return "success";
+		}
+		//TODO 不成功
+		this.addFieldError("", "用户名与密码不匹配");
+		return "login";
+	}
+	
+	public String home(){
+		return "home";
+	}
+	
+	public String findAll(){
+		List<CrmStaff> allStaff = staffService.findAllStaff();
+		
+		ActionContext.getContext().put("allStaff",allStaff);
+		
+		return "findAll";
+	}
+	
+	public String editUI(){
+		CrmStaff findStaff = this.staffService.findById(staff.getStaffId());
+		
+		ActionContext.getContext().getValueStack().push(findStaff);
+
+		List<CrmDepartment> allDepartment = this.departmentService.findAll();
+		
+		ActionContext.getContext().getValueStack().set("allDepartment", allDepartment);
+		
+		return "editUI";
+	}
+	
+	public String edit(){
+		this.staffService.updateStaff(staff);
+		return "edit";
+	}
+	
+	
+	
+}
